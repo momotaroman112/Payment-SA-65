@@ -1,14 +1,16 @@
+import { RoomInterface } from './IRoom';
 import { FoodOrderedsInterface } from './IFoodordered';
 import { UserInterface } from './IUser';
 export interface BookingsInterface {
     ID: number;
     BookingTimeStart: Date;
     BookingTimeStop: Date;
-    Room: string;
+    RoomID: number;
+    Room: RoomInterface;
     TotalPrice: number;
     
-    UserID: number;
-    User: UserInterface;
+    MemberID: number;
+    Member: UserInterface;
 
     FoodOrdereds: FoodOrderedsInterface[];
     

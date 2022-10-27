@@ -69,8 +69,8 @@ func SetupDatabase() {
 		Email:    "wichai@gmai.com",
 	})
 
-	var a User
-	var b User
+	var a Employee
+	var b Employee
 
 	db.Raw("SELECT * FROM employees WHERE email = ?", "komson@gmai.com").Scan(&a)
 	db.Raw("SELECT * FROM employees WHERE email = ?", "wichai@gmai.com").Scan(&b)
@@ -119,13 +119,50 @@ func SetupDatabase() {
 
 	// FoodOrderedFoodsets
 
+	// Type
+		// setup type
+		Type1 := Type{
+			Name:  "Laboratory",
+			Price: 3000,
+		}
+		db.Model(&Type{}).Create(&Type1)
+	
+		Type2 := Type{
+			Name:  "Lecture",
+			Price: 500,
+		}
+		db.Model(&Type{}).Create(&Type2)
+	
+		Type3 := Type{
+			Name:  "Meeting",
+			Price: 1500,
+		}
+		db.Model(&Type{}).Create(&Type3)
+
+	// Room
+	Room1 := Room{
+		Number: "1112",
+		Name: "SA Room",
+		Type: Type1,
+		Employee: a,
+	}
+	db.Model(&Room{}).Create(&Room1)
+
+	Room2 := Room{
+		Number: "2112",
+		Name: "SE Room",
+		Type: Type2,
+		Employee: b,
+	}
+	db.Model(&Room{}).Create(&Room2)
+
+
 	// Booking
 	Booking1 := Booking{
 		BookingTimeStart: time.Date(2022, 10, 16, 12, 00, 00, 00, time.Local),
 		BookingTimeStop:  time.Date(2022, 10, 16, 12, 00, 00, 00, time.Local),
-		Room:             "1012",
-		TotalPrice:       3000,
-		User:             jo,
+		Room:             Room1,
+		Member:             jo,
 		FoodOrdereds:     []FoodOrdered{Foodordered1, Foodordered3},
 	}
 	db.Model(&Booking{}).Create(&Booking1)
@@ -133,9 +170,8 @@ func SetupDatabase() {
 	Booking2 := Booking{
 		BookingTimeStart: time.Date(2022, 10, 16, 12, 00, 00, 00, time.Local),
 		BookingTimeStop:  time.Date(2022, 10, 16, 12, 00, 00, 00, time.Local),
-		Room:             "1112",
-		TotalPrice:       2000,
-		User:             fei,
+		Room:             Room2,
+		Member:            fei,
 		FoodOrdereds:     []FoodOrdered{Foodordered2},
 	}
 	db.Model(&Booking{}).Create(&Booking2)

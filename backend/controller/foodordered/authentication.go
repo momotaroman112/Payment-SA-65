@@ -3,8 +3,8 @@ package controller
 import (
 	"net/http"
 
-	"github.com/ChatreeDev/sa-65-example/entity"
-	"github.com/ChatreeDev/sa-65-example/service"
+	"github.com/Siriwan38/Sa-65-Group-18/entity"
+	"github.com/Siriwan38/Sa-65-Group-18/service"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )

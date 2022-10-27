@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/siriwan38/sa-65-example/entity"
-	"github.com/siriwan38/sa-65-example/service"
+	"github.com/Siriwan38/Sa-65-Group-18/entity"
+	"github.com/Siriwan38/Sa-65-Group-18/service"
 	"golang.org/x/crypto/bcrypt"
 )
 

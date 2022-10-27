@@ -2,7 +2,7 @@ package controller
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/thanaponkhanoon/sa-65-example/entity"
+	"github.com/Siriwan38/Sa-65-Group-18/entity"
 	"net/http"
 )
 

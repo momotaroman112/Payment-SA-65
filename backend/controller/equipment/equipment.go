@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"github.com/thanaponkhanoon/sa-65-example/entity"
+	"github.com/Siriwan38/Sa-65-Group-18/entity"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )

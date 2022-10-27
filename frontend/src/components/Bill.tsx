@@ -92,9 +92,9 @@ function Bills() {
                 <TableCell align="center" width="15%">
                   Booking
                 </TableCell>
-                {/* <TableCell align="center" width="20%">
+                 <TableCell align="center" width="20%">
                   Food Ordered
-                </TableCell> */}
+                </TableCell>
                 <TableCell align="center" width="20%">
                   Total Price
                 </TableCell>
@@ -110,8 +110,8 @@ function Bills() {
                   <TableCell align="left">{bill.ID}</TableCell>
                   <TableCell align="left">{bill.Employee.Name}</TableCell>
                   <TableCell align="center">{bill.PaymentType.Name}</TableCell>
-                  <TableCell align="center">{bill.Booking.Room}</TableCell>
-                  {/* <TableCell align="center">{bill.FoodOrdered.Name}</TableCell> */}
+                  <TableCell align="center">{bill.Booking.Room.Type.Price}</TableCell>
+                 <TableCell align="center">{bill.Booking.FoodOrdereds[0].TotalPrice}</TableCell>
                   <TableCell align="center">
                     {bill.TotalPrice}
                   </TableCell>

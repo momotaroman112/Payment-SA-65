@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-
-import Alert from "@mui/material/Alert";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import Divider from "@mui/material/Divider";
@@ -29,7 +27,14 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import Button from "@mui/material/Button";
-import moment from "moment";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 export default function BillCreate() {
   const [employee, setEmployee] = React.useState<EmployeesInterface>();
@@ -199,7 +204,7 @@ export default function BillCreate() {
 
   const sumTotalPrice = () => {
     let bookingPrice =
-      booking.find((b) => b.ID === bill.BookingID)?.TotalPrice ?? 0;
+      booking.find((b) => b.ID === bill.BookingID)?.Room.Type.Price ?? 0;
     let foodOrderedPrice =
       booking.find((b) => b.ID === bill.BookingID)?.FoodOrdereds[0].TotalPrice ?? 0;
       // foodordered.find((f) => f.ID === bill.FoodOrderedID)?.TotalPrice ?? 0;
@@ -210,7 +215,7 @@ export default function BillCreate() {
   useEffect(() => {
     getEmployee();
     getBooking();
-    getFoodOrdered();
+    //getFoodOrdered();
     getPaymentType();
   }, []);
 
@@ -271,6 +276,7 @@ export default function BillCreate() {
           <Grid item xs={6}>
             <TextField disabled id="Name" value={employee?.Name} />
           </Grid>
+
           <Grid item xs={4}>
             <p>ห้องที่ต้องการชำระเงิน</p>
           </Grid>
@@ -285,16 +291,23 @@ export default function BillCreate() {
             >
               {booking.map((item: BookingsInterface) => (
                 <MenuItem key={item.ID} value={item.ID}>
-                  {item.Room}
+                  {item.Room.Name}
                 </MenuItem>
               ))}
             </Select>
           </Grid>
+
+          {/* <Grid item xs={4}>
+            <p>ราคาห้อง</p>
+          </Grid>
+          <Grid item xs={6}>
+            <TextField disabled  id = "Price" value={booking.map.room.Type.Price}/>
+          </Grid> */}
           <Grid item xs={4}>
             <p>ชื่อผู้ใช้งาน</p>
           </Grid>
           <Grid item xs={8}>
-            <TextField disabled id="Name" value={selectedBooking?.User.Name} />
+            <TextField disabled id="Name" value={selectedBooking?.Member.Name} />
           </Grid>
           <Grid item xs={4}>
             <p>รายการสั่งอาหาร</p>

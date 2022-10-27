@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/momotaroman112/sa-65-file/entity"
+	"github.com/Siriwan38/Sa-65-Group-18/entity"
 )
 
 // POST /bills //รับข้อมูลมาจาก Frontend มาบันทึกลง DB
@@ -13,7 +13,7 @@ func Createbill(c *gin.Context) {
 	var bill entity.Bill
 	var employee entity.Employee
 	var payment_types entity.PaymentType
-	var foodordered entity.FoodOrdered
+	// var foodordered entity.FoodOrdered
 	var booking entity.Booking
 
 	// ผลลัพธ์ที่ได้จากขั้นตอนที่ 8 จะถูก bind เข้าตัวแปร bill
@@ -35,10 +35,10 @@ func Createbill(c *gin.Context) {
 	}
 
 	// 11: ค้นหา Foodered ด้วย id
-	if tx := entity.DB().Where("id = ?", bill.FoodOrderedID).First(&foodordered); tx.RowsAffected == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "foodordered not found"})
-		return
-	}
+	// if tx := entity.DB().Where("id = ?", bill.FoodOrderedID).First(&foodordered); tx.RowsAffected == 0 {
+	// 	c.JSON(http.StatusBadRequest, gin.H{"error": "foodordered not found"})
+	// 	return
+	// }
 
 	// 12: ค้นหา payment_types ด้วย id
 	if tx := entity.DB().Where("id = ?", bill.PaymentTypeID).First(&payment_types); tx.RowsAffected == 0 {
@@ -50,7 +50,7 @@ func Createbill(c *gin.Context) {
 	bill_pay := entity.Bill{
 		Employee: employee,
 		PaymentType: payment_types, // โยงความสัมพันธ์กับ Entity payment_types
-		FoodOrdered: foodordered,   // โยงความสัมพันธ์กับ Entity place
+		// FoodOrdered: foodordered,   // โยงความสัมพันธ์กับ Entity place
 		Booking:     booking,       // โยงความสัมพันธ์กับ Entity booking
 		BillTime:    bill.BillTime, // ตั้งค่าฟิลด์ BillTime
 		TotalPrice:  bill.TotalPrice, // ตั้งค่าฟิลด์ Total_price
@@ -69,9 +69,11 @@ func ListBill(c *gin.Context) {
 	var bill []entity.Bill
 	if err := entity.DB().
 		Preload("PaymentType").
-		Preload("FoodOrdered").
 		Preload("Booking").
-		Preload("Booking.User").
+		Preload("Booking.Member").
+		Preload("Booking.Room").
+		Preload("Booking.Room.Type").
+		Preload("Booking.FoodOrdereds").
 		Preload("Employee").
 		Raw("SELECT * FROM bills").Find(&bill).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

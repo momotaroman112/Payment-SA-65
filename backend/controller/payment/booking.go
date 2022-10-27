@@ -3,7 +3,7 @@ package controller
 import (
 	"net/http"
 
-	"github.com/momotaroman112/sa-65-file/entity"
+	"github.com/Siriwan38/Sa-65-Group-18/entity"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,10 +11,13 @@ import (
 func ListBooking(c *gin.Context) {
 	var bookings []entity.Booking
 	if err := entity.DB().Raw("SELECT * FROM Bookings").
+	Preload("Member").
+	Preload("Room").
+	Preload("Room.Type").
 	Preload("FoodOrdereds").
 	Preload("FoodOrdereds.FoodOrderedFoodSets").
 	Preload("FoodOrdereds.FoodOrderedFoodSets.FoodSet").
-	Preload("User").Find(&bookings).Error; err != nil {
+	Find(&bookings).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -27,10 +30,13 @@ func GetBooking(c *gin.Context) {
 	id := c.Param("id")
 	var booking entity.Booking
 	if err := entity.DB().Raw("SELECT * FROM bookings WHERE id = ? ORDER BY room ASC", id).
+	Preload("Member").
+	Preload("Room").
+	Preload("Room.Type").
 	Preload("FoodOrdereds").
 	Preload("FoodOrdereds.FoodOrderedFoodSets").
 	Preload("FoodOrdereds.FoodOrderedFoodSets.FoodSet").
-	Preload("User").Find(&booking).Error; err != nil {
+	Find(&booking).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
@@ -42,7 +48,14 @@ func GetBooking(c *gin.Context) {
 func GetBookingByUser(c *gin.Context) {
 	id := c.Param("id")
 	var booking entity.Booking
-	if err := entity.DB().Raw("SELECT * FROM bookings WHERE user_id = ? ORDER BY room ASC", id).Preload("User").Find(&booking).Error; err != nil {
+	if err := entity.DB().Raw("SELECT * FROM bookings WHERE member_id = ?", id).
+	Preload("Member").
+	Preload("Room").
+	Preload("Room.Type").
+	Preload("FoodOrdereds").
+	Preload("FoodOrdereds.FoodOrderedFoodSets").
+	Preload("FoodOrdereds.FoodOrderedFoodSets.FoodSet").
+	Find(&booking).Error; err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}

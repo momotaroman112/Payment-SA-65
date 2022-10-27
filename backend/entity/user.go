@@ -13,7 +13,7 @@ type User struct {
 	Email		string			`gorm:"uniqueIndex"`
 	Password     string
 
-	Bookings	[]Booking	 `gorm:"foreignKey:UserID"`
+	Bookings	[]Booking	 `gorm:"foreignKey:MemberID"`
 }
 
 type Employee struct {
@@ -53,22 +53,13 @@ type FoodOrdered struct {
 	gorm.Model //เอาไว้ hold พวก Pk (FoodOrderedID)
 	FoodTime   time.Time
 
-	//Member_id ทำหน้าที่เป็น fk
-	// ไม่จำเป็นต้องใช้ เพราะ Member มีอยู่ใน Booking ซึ่งคนที่สั่งอาหารต้องทำการ Booking ก่อน
-	// MemberID *uint
-	// Member    User
-
-
 	BookingID *uint
 	Booking   Booking
 
 	TotalPrice uint
 
-	//คสพ 1 อยู่ฝั่ง FoodOrdered
 	FoodOrderedFoodSets []FoodOrderedFoodSet `gorm:"foreignKey:FoodOrderedID"`
 
-	//FFID *uint
-	//FF    FoodOrdered_FoodSet
 }
 
 
@@ -79,15 +70,36 @@ type PaymentType struct {
 }
 
 
+type Type struct {
+	gorm.Model
+	Name  string
+	Price int
+	Rooms []Room `gorm:"foreignKey:TypeID"`
+}
+
+type Room struct {
+	gorm.Model
+	Number string
+	Name   string
+
+	//TypeID  ทำหน้าที่เป็น FK
+	TypeID *uint
+	Type   Type
+	//EmployeeID ทำหน้าที่เป็น FK
+	EmployeeID *uint
+	Employee   Employee
+}
+
 type Booking struct {
 	gorm.Model
 	BookingTimeStart  time.Time
 	BookingTimeStop time.Time
-	Room		  string
-	TotalPrice     uint
 
-	UserID     *uint
-	User      	User
+	RoomID 			*uint
+	Room			Room
+
+	MemberID     	*uint
+	Member      	User
 
 	FoodOrdereds []FoodOrdered `gorm:"foreignKey:BookingID"`
 }
@@ -107,8 +119,8 @@ type Bill struct {
 	BookingID *uint    `gorm:"uniqueIndex"`
 	Booking    Booking `gorm:"constraint:OnDelete:CASCADE"` //belong to ลบใบลงทะเบียน บิลหาย
 
-	FoodOrderedID *uint
-	FoodOrdered   FoodOrdered
+	// FoodOrderedID *uint
+	// FoodOrdered   FoodOrdered `gorm:"foreignKey:BillID"`
 
 	TotalPrice uint
 }
